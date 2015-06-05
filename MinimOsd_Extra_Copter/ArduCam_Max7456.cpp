@@ -32,6 +32,7 @@ void OSD::init()
 
   digitalWrite(MAX7456_SELECT,LOW);
   //read black level register
+  Spi.setClockDivider(SPI_CLOCK_DIV2);
   Spi.transfer(MAX7456_OSDBL_reg_read);//black level read register
   byte osdbl_r = Spi.transfer(0xff);
   Spi.transfer(MAX7456_VM0_reg);
