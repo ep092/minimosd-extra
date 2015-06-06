@@ -49,10 +49,7 @@ byte SPI::transfer(byte value, byte period)
   while (!(SPSR & (1<<SPIF))) ;
   return SPDR;
 }
-void SPI::setClockDivider(byte rate) {
-  SPCR = (SPCR & ~SPI_CLOCK_MASK) | (rate & SPI_CLOCK_MASK);
-  SPSR = (SPSR & ~SPI_2XCLOCK_MASK) | ((rate >> 2) & SPI_2XCLOCK_MASK);
-}
+
 
 //---------- preinstantiate SPI object --------------------------------------
 

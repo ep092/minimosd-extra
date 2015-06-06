@@ -18,6 +18,7 @@ void panLogo(){
 /******* PANELS - POSITION *******/
 
 void writePanels(){ 
+  
 //if(millis() < (lastMAVBeat + 2200))
 //  waitingMAVBeats = 1;
 //if(ISd(panel,Warn_BIT)) panWarn(panWarn_XY[0][panel], panWarn_XY[1][panel]); // this must be here so warnings are always checked
@@ -45,6 +46,8 @@ void writePanels(){
   }
   //Normal osd panel
   else{
+    while(digitalRead(MAX7456_VSYNC));  //wait until vsync
+
     if(ISd(0,Warn_BIT)) panWarn(panWarn_XY[0][0], panWarn_XY[1][0]); // this must be here so warnings are always checked
     //Check for panel toggle
     if(ch_toggle > 3) panOff(); // This must be first so you can always toggle
@@ -55,6 +58,11 @@ void writePanels(){
       currentBasePanel = 0;
     }
     if(panel != npanels){
+       //Testing Hor_BIT from 8 bit register C
+       if(ISc(panel,Hor_BIT)) panHorizon(panHorizon_XY[0][panel], panHorizon_XY[1][panel]); //14x5
+       
+       while(digitalRead(MAX7456_VSYNC));  //wait until vsync
+
       //Testing bits from 8 bit register A 
       //if(ISa(panel,Cen_BIT)) panCenter(panCenter_XY[0][panel], panCenter_XY[1][panel]);   //4x2
       if(ISa(panel,Pit_BIT)) panPitch(panPitch_XY[0][panel], panPitch_XY[1][panel]); //5x1
@@ -80,17 +88,19 @@ void writePanels(){
       if(wp_number > 0){
         if(ISb(panel,WDis_BIT)) panWPDis(panWPDis_XY[0][panel], panWPDis_XY[1][panel]); //??x??
       }
+      while(digitalRead(MAX7456_VSYNC));  //wait until vsync
 
-      //Testing bits from 8 bit register C 
+      //Testing bits from 8 bit register C except _Hor_BIT
       if(ISc(panel,Alt_BIT)) panAlt(panAlt_XY[0][panel], panAlt_XY[1][panel]); //
       if(ISc(panel,Halt_BIT)) panHomeAlt(panHomeAlt_XY[0][panel], panHomeAlt_XY[1][panel]); //
       if(ISc(panel,Vel_BIT)) panVel(panVel_XY[0][panel], panVel_XY[1][panel]); //
-      if(ISc(panel,As_BIT)) panAirSpeed(panAirSpeed_XY[0][panel], panAirSpeed_XY[1][panel]); //
+      if(ISc(panel,As_BIT)) panAirSpeed(panAirSpeed_XY[0][panel], panAirSpeed_XY[1][panel]); //   
       if(ISc(panel,Thr_BIT)) panThr(panThr_XY[0][panel], panThr_XY[1][panel]); //
       if(ISc(panel,FMod_BIT)) panFlightMode(panFMod_XY[0][panel], panFMod_XY[1][panel]);  //
-      if(ISc(panel,Hor_BIT)) panHorizon(panHorizon_XY[0][panel], panHorizon_XY[1][panel]); //14x5
       if(ISc(panel,CurA_BIT)) panCur_A(panCur_A_XY[0][panel], panCur_A_XY[1][panel]);
 
+      while(digitalRead(MAX7456_VSYNC));  //wait until vsync
+ 
       //Testing bits from 8 bit register D 
       //if(ISd(Off_BIT)) panOff(panOff_XY[0], panOff_XY[1]);
       //For now we don't have windspeed in copter
